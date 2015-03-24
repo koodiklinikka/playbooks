@@ -1,0 +1,4 @@
+---
+- name: add github ssh keys
+  shell: ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
+  sudo: yes

@@ -1,0 +1,3 @@
+- name: Install python dependencies for managing apt repositories
+  apt: pkg=python-pycurl
+  tags: [nginx, repo]

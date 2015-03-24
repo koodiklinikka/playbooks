@@ -1,7 +1,4 @@
 ---
-- name: Install python dependencies for managing apt repositories
-  apt: pkg=python-pycurl
-  tags: [nginx, repo]
 
 - name: Add nginx repository
   apt_repository: repo='deb http://nginx.org/packages/ubuntu/ precise nginx' state=present update_cache=yes

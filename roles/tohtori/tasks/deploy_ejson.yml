@@ -1,0 +1,9 @@
+- name: Assures /opt/.ejson dir exists
+  file: path=/opt/.ejson state=directory mode=700
+  
+- name: Deploy ejson private key
+  copy:
+    content: "{{ ejson_private_key }}"
+    dest: /opt/.ejson/{{ ejson_public }}
+  tags: [ejson]
+  sudo: true

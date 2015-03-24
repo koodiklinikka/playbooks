@@ -1,0 +1,4 @@
+---
+- include: tohtori_user.yml
+- include: deploy_ejson.yml
+- include: build.yml
