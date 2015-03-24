@@ -2,11 +2,14 @@
 - name: Bootstrap a new server
   hosts: all:!localhost
   sudo: yes
-  gather_facts: no
+  gather_facts: yes
   vars_files:
     - vars/users.yml
+    - roles/koodiklinikka.fi/defaults/main.yml
+    - roles/koodiklinikka.fi-api/defaults/main.yml
   roles:
     - base
+    - docker
     - nginx
   tasks:
     - include: tasks/webuser.yml

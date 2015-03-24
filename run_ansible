@@ -1,4 +1,24 @@
-#!/bin/sh
-ANSIBLE_SSH_ARGS="-o ForwardAgent=yes"
+#!/bin/bash
+
+usage() { echo "$0 -p apps/base -m test/prod";  }
+
+usage
+
+while getopts ":p:m:" OPTION; do
+  case "${OPTION}" in
+    p) PLAYBOOK=${OPTARG};;
+    m) RUN_MODE=${OPTARG};;
+  esac
+done
+
+if [ "$RUN_MODE" == "prod" ]
+  then
+  RUN_MODE=""
+else
+  RUN_MODE="--check"
+fi
+
+
 PW=`ejson --keydir=$HOME/.ejson decrypt secrets/passwords.ejson|grep ansible_vault|cut -d'"' -f4`
-echo $PW|ansible-playbook applications.yml -i hosts --vault-password-file=/bin/cat 
+echo $PW|ansible-playbook $PLAYBOOK.yml -i hosts --vault-password-file=/bin/cat $RUN_MODE -vvvv
+

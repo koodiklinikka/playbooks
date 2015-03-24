@@ -5,7 +5,7 @@
 - name: create users
   user: >
     name={{ item.name }}
-    groups=admin
+    groups=admin,docker
     shell=/bin/bash
     password={{ item.password }}
   with_items: users
