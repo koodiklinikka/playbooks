@@ -1,0 +1,15 @@
+---
+- name: Setup new application server
+  hosts: application
+  roles:
+    - nvm
+    - koodiklinikka.fi
+    - koodiklinikka.fi-api
+  tasks:
+    - include: roles/nginx/tasks/nginx_config.yml
+  handlers:
+    - name: reload nginx
+      sudo: true
+      service: >
+        name=nginx
+        state=reloaded

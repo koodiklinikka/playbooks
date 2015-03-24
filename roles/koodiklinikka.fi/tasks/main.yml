@@ -1,0 +1,21 @@
+---
+- name: Deploy client from git
+  remote_user: "{{ koodiklinikka_user }}"
+  action: >
+    git
+    repo="{{ koodiklinikka_client_repo }}"
+    dest="{{ koodiklinikka_app_path }}"
+    accept_hostkey=True
+
+- name: Make sure Node.js is installed and properly aliased
+  remote_user: "{{ koodiklinikka_user }}"
+  command: >
+    bash -c "source {{ koodiklinikka_nvm_script }} && nvm install {{ koodiklinikka_nodejs_version }} && nvm alias {{ koodiklinikka_project_name }} {{ koodiklinikka_nodejs_version }}"
+  register: nvm_result
+  changed_when: >
+    "already installed" not in nvm_result.stdout
+
+- name: Install client NPM dependencies and build assets
+  remote_user: "{{ koodiklinikka_user }}"
+  command: >
+    bash -c "source {{ koodiklinikka_nvm_script }} && nvm use {{ koodiklinikka_project_name }} && cd {{ koodiklinikka_app_path }} && npm install && NODE_ENV=production npm run build"

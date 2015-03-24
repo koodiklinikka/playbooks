@@ -1,0 +1,9 @@
+---
+- include: locale.yml tags=base,locale
+- include: users.yml tags=base,users
+- include: packages.yml tags=base,packages
+- include: sudo.yml tags=base,sudo
+- include: sshd.yml tags=base,ssh
+- include: ufw.yml tags=base,ufw
+- include: ntp.yml tags=base,ntp
+- include: timezone.yml tags=base,timezone

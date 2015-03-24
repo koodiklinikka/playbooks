@@ -1,0 +1,4 @@
+---
+koodiklinikka_project_name: koodiklinikka.fi
+koodiklinikka_client_repo: git@github.com:koodiklinikka/koodiklinikka.fi.git
+koodiklinikka_nodejs_version: v0.10.25

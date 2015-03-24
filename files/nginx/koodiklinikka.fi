@@ -1,0 +1,43 @@
+server { 
+    listen 80;
+    server_name www.koodiklinikka.fi koodiklinikka.fi;
+    return 301 https://koodiklinikka.fi$request_uri;
+}
+
+server { 
+    listen 443;
+    server_name www.koodiklinikka.fi;
+
+    include conf.d/ssl_profile.conf;
+    ssl on;
+    ssl_certificate /etc/ssl/certs/koodiklinikka.fi.pem;
+    ssl_certificate_key /etc/ssl/private/koodiklinikka.fi.key;
+
+    return 301 https://koodiklinikka.fi$request_uri;
+}
+
+server {
+    listen 443;
+    server_name koodiklinikka.fi;
+    
+    include conf.d/ssl_profile.conf;
+    ssl on;
+    ssl_certificate /etc/ssl/certs/koodiklinikka.fi.pem;
+    ssl_certificate_key /etc/ssl/private/koodiklinikka.fi.key;
+
+    root {{ koodiklinikka_app_path }}/public;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    location /api {
+        rewrite /api/(.*) /$1 break;
+        proxy_pass  http://localhost:{{ koodiklinikka_api_port }};
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP  $remote_addr;
+    }
+}

@@ -1,0 +1,42 @@
+---
+
+- name: generate ssl forward secrecy key
+  command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096 creates=/etc/ssl/certs/dhparam.pem
+  sudo: true
+  tags: nginx
+
+- name: get root cert for ssl stapling
+  get_url: url=http://www.startssl.com/certs/ca.pem dest=/etc/ssl/certs/ca.pem sha256sum=916a8f9232328192968c81c8edb672fa539f726861dfe379ca722050e19962cd
+  sudo: true
+
+- name: get inter cert for ssl stapling
+  get_url: url=http://www.startssl.com/certs/sub.class1.server.ca.pem dest=/etc/ssl/certs/sub.class1.server.ca.pem sha256sum=e7241cd06fed26efdb1db2283ce5c2f9693b18c6698d76b0427f39c3f71ee001
+  sudo: true
+
+- name: generate combined cert for stapling
+  shell: cat /etc/ssl/certs/ca.pem /etc/ssl/certs/sub.class1.server.ca.pem > /etc/ssl/certs/combined_startssl.pem creates=/etc/ssl/certs/combined_startssl.pem
+  sudo: true
+  tags: nginx
+
+- name: Copy private key
+  copy:
+    content: "{{ ssl_key }}"
+    dest: /etc/ssl/private/koodiklinikka.fi.key 
+    mode: u+rw
+  tags: [nginx]
+  notify: reload nginx
+  sudo: true
+
+- name: Copy cert
+  copy:
+    content: "{{ ssl_certificate }}"
+    dest: /etc/ssl/certs/koodiklinikka.fi.pem
+  tags: [nginx]
+  notify: reload nginx
+  sudo: true
+
+- name: Copy nginx SSL configuration
+  copy: src=files/nginx/ssl_profile.conf dest=/etc/nginx/conf.d
+  notify: reload nginx
+  sudo: true
+  tags: [nginx]

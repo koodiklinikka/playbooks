@@ -1,0 +1,4 @@
+#!/bin/sh
+ANSIBLE_SSH_ARGS="-o ForwardAgent=yes"
+PW=`ejson --keydir=$HOME/.ejson decrypt secrets/passwords.ejson|grep ansible_vault|cut -d'"' -f4`
+echo $PW|ansible-playbook applications.yml -i hosts --vault-password-file=/bin/cat 

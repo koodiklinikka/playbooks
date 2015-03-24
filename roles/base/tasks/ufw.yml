@@ -1,0 +1,9 @@
+---
+- name: Enable firewall
+  ufw: state=enabled policy=allow
+
+- name: Allow tcp/22 for SSH
+  ufw: rule=allow port=22 proto=tcp
+
+- name: Reject other ports
+  ufw: rule=reject

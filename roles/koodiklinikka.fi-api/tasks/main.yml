@@ -1,0 +1,39 @@
+---
+- name: Deploy from git
+  remote_user: "{{ koodiklinikka_user }}"
+  action: >
+    git
+    repo="{{ koodiklinikka_api_repository_url }}"
+    dest="{{ koodiklinikka_api_app_path }}"
+    accept_hostkey=True
+  notify: restart service
+
+- name: Make sure Node.js is installed and properly aliased
+  remote_user: "{{ koodiklinikka_api_user }}"
+  command: >
+    bash -c "source {{ koodiklinikka_api_nvm_script }} && nvm install {{ koodiklinikka_api_nodejs_version }} && nvm alias {{ koodiklinikka_api_project_name }} {{ koodiklinikka_api_nodejs_version }}"
+  register: nvm_result
+  changed_when: >
+    "already installed" not in nvm_result.stdout
+  notify: restart service
+
+- name: Install NPM dependencies and build assets
+  remote_user: "{{ koodiklinikka_api_user }}"
+  command: >
+    bash -c "source {{ koodiklinikka_api_nvm_script }} && nvm use {{ koodiklinikka_api_project_name }} && cd {{ koodiklinikka_api_app_path }} && npm install"
+  notify: restart service
+
+- name: Setup config
+  remote_user: "{{ koodiklinikka_api_user }}"
+  template: >
+    src=config.j2
+    dest="{{ koodiklinikka_api_app_path }}/config.json"
+    mode=664
+
+- name: Setup Upstart config
+  template: >
+    src=upstart.j2
+    dest="/etc/init/{{ koodiklinikka_api_project_name }}.conf"
+    mode=664
+  sudo: true
+  notify: restart service

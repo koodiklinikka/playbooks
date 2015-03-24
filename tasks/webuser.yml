@@ -1,0 +1,18 @@
+---
+- name: Create web user
+  sudo: true
+  user: name=web home=/opt/web password=$1$U7pTMMko$SY19s1PIxdD2NCFgM0LQr0
+
+- name: Allow all users to log in as a web user
+  sudo: true
+  authorized_key: >
+    user=web
+    key='{{lookup('file', '../roles/base/files/' + item.public_key)}}'
+  with_items: users
+
+- name: Allow web user to restart nginx
+  sudo: true
+  lineinfile: >
+    dest=/etc/sudoers
+    line="web ALL=(root) NOPASSWD:/usr/sbin/service nginx restart"
+    validate='visudo -cf %s'

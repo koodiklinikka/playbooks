@@ -1,0 +1,4 @@
+---
+- include: install_nginx.yml
+- include: install_certs.yml
+- include: nginx_config.yml

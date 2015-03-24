@@ -1,0 +1,34 @@
+---
+
+- name: Copy nginx main configuration file
+  copy: src=files/nginx/nginx.conf dest=/etc/nginx
+  notify: reload nginx
+  sudo: true
+  tags: [nginx]
+
+- file: path=/etc/nginx/location state=directory group=web mode=775
+  sudo: true
+  tags: [nginx]
+
+- file: path=/etc/nginx/htpasswd state=directory group=web mode=775
+  sudo: true
+  tags: [nginx]
+
+- name: Copy site configs
+  sudo: true
+  template: >
+    src=files/nginx/koodiklinikka.fi
+    dest=/etc/nginx/sites-available/
+  notify: reload nginx
+  tags: [nginx]
+
+- name: Enable sites
+  sudo: true
+  file: >
+    src=/etc/nginx/sites-available/{{ item }}
+    path=/etc/nginx/sites-enabled/{{ item }}
+    state=link
+  with_items:
+    - koodiklinikka.fi
+  notify: reload nginx
+  tags: [nginx]

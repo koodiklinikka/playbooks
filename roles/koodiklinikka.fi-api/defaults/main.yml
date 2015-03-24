@@ -1,0 +1,5 @@
+---
+koodiklinikka_api_project_name: koodiklinikka.fi-api
+koodiklinikka_api_repository_url: git@github.com:koodiklinikka/koodiklinikka.fi-api.git
+koodiklinikka_api_nodejs_version: v0.10.25
+koodiklinikka_api_port: 9000
