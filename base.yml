@@ -5,11 +5,13 @@
   gather_facts: yes
   vars_files:
     - vars/users.yml
+    - vars/ejson_key.yml
     - roles/koodiklinikka.fi/defaults/main.yml
     - roles/koodiklinikka.fi-api/defaults/main.yml
   roles:
     - base
     - docker
     - nginx
+    - newrelic_container
   tasks:
     - include: tasks/webuser.yml

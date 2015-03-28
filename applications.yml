@@ -8,7 +8,6 @@
     - tohtori
   vars_files:
   - vars/application_secret_vars.yml
-  - vars/ejson_key.yml
   tasks:
     - include: roles/nginx/tasks/nginx_config.yml
   handlers:
