@@ -32,7 +32,7 @@
 
 - name: kill old version
   shell: docker stop {{ koodiklinikka_tohtori_container_name }}
-  when: container is defined and container.changed and current_container_id != ""
+  when: container is defined and container.changed and current_container_id.stdout != ""
 
 - name: get old containers
   shell: docker ps -a|grep Exited| awk '{print $1}'
