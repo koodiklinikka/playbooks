@@ -27,7 +27,7 @@
   when: container is defined and container.changed and current_image_sha.stdout != ""
 
 - name: get running container
-  shell: docker ps -a|grep {{ koodiklinikka_tohtori_container_name }}|grep latest| awk '{print $1}'
+  shell: docker ps |grep {{ koodiklinikka_tohtori_container_name }}| awk '{print $1}'
   register: current_container_id
 
 - name: kill old version
