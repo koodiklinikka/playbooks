@@ -1,4 +1,0 @@
----
-
-- name: Start the container
-  shell: docker run --restart=always -d -e NEW_RELIC_LICENSE_KEY={{ newrelic_key }} --name newrelic_sysmond --hostname `hostname` uzyexe/newrelic 
