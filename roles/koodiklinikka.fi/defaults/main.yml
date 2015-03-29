@@ -6,3 +6,6 @@ koodiklinikka_nodejs_version: v0.10.25
 koodiklinikka_app_path: /opt/web/koodiklinikka.fi
 koodiklinikka_nvm_script: /opt/web/nvm/nvm.sh
 koodiklinikka_user: web
+
+nvm_path: /opt/web/nvm
+nvm_user: web

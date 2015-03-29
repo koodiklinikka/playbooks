@@ -1,6 +1,0 @@
----
-- name: restart service
-  sudo: true
-  service: >
-    name={{ koodiklinikka_api_project_name }}
-    state=restarted
