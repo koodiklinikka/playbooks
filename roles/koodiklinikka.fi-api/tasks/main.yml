@@ -44,7 +44,7 @@
   when: old_containers.stdout != ""
 
 - name: Start the container
-  shell: docker run --restart=always -p {{ koodiklinikka_api_port }}:{{ koodiklinikka_api_port }} -d --name {{ koodiklinikka_api_container_name }} {{ koodiklinikka_api_container_name }}:latest 
+  shell: docker run --restart=always -p 127.0.0.1:{{ koodiklinikka_api_port }}:{{ koodiklinikka_api_port }} -d --name {{ koodiklinikka_api_container_name }} {{ koodiklinikka_api_container_name }}:latest 
   when: container is defined and container.changed
 
 - name: get old images
