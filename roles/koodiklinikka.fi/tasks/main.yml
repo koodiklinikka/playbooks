@@ -6,7 +6,6 @@
     repo="{{ koodiklinikka_repository_url }}"
     dest="{{ koodiklinikka_app_path }}"
     accept_hostkey=True
-    version=docker
   sudo: no
   register: gitclone
 
