@@ -1,0 +1,7 @@
+---
+- name: Rollback api
+  hosts: application
+  vars_files:
+  - roles/koodiklinikka.fi/defaults/main.yml
+  tasks:
+    - include: roles/koodiklinikka.fi/tasks/rollback.yml

@@ -1,7 +1,0 @@
----
-- name: Install NVM
-  remote_user: "{{ nvm_user }}"
-  action: >
-    git
-    repo="https://github.com/creationix/nvm"
-    dest="{{ nvm_path }}"

@@ -3,19 +3,53 @@
   remote_user: "{{ koodiklinikka_user }}"
   action: >
     git
-    repo="{{ koodiklinikka_client_repo }}"
+    repo="{{ koodiklinikka_repository_url }}"
     dest="{{ koodiklinikka_app_path }}"
     accept_hostkey=True
+  sudo: no
+  register: gitclone
 
-- name: Make sure Node.js is installed and properly aliased
-  remote_user: "{{ koodiklinikka_user }}"
-  command: >
-    bash -c "source {{ koodiklinikka_nvm_script }} && nvm install {{ koodiklinikka_nodejs_version }} && nvm alias {{ koodiklinikka_project_name }} {{ koodiklinikka_nodejs_version }}"
-  register: nvm_result
-  changed_when: >
-    "already installed" not in nvm_result.stdout
+- name: get  previous container
+  shell: docker images|grep {{ koodiklinikka_container_name }}|grep latest| awk '{print $3}'
+  register: current_image_sha
 
-- name: Install client NPM dependencies and build assets
-  remote_user: "{{ koodiklinikka_user }}"
-  command: >
-    bash -c "source {{ koodiklinikka_nvm_script }} && nvm use {{ koodiklinikka_project_name }} && cd {{ koodiklinikka_app_path }} && npm install && NODE_ENV=production npm run build"
+- name: Build {{ koodiklinikka_container_name }}
+  shell: ./build_docker
+  args:
+    chdir: "{{ koodiklinikka_app_path}}"
+  sudo: yes
+  when: gitclone.changed
+  register: container
+
+- name: tag previous version
+  shell: docker tag -f {{ current_image_sha.stdout }} {{ koodiklinikka_container_name }}:old
+  when: container is defined and container.changed and current_image_sha.stdout != ""
+
+- name: get running container
+  shell: docker ps |grep {{ koodiklinikka_container_name }}| awk '{print $1}'
+  register: current_container_id
+
+- name: kill old version
+  shell: docker stop {{ koodiklinikka_container_name }}
+  when: container is defined and container.changed and current_container_id.stdout != ""
+
+- name: get old containers
+  shell: docker ps -a|grep Exited| awk '{print $1}'
+  register: old_containers
+
+- name: clean old containers
+  shell: docker rm $(docker ps -a|grep Exited| awk '{print $1}')
+  when: old_containers.stdout != ""
+
+- name: Start the container
+  shell: docker run --restart=always -p 127.0.0.1:{{ koodiklinikka_port }}:{{ koodiklinikka_port }} -d --name {{ koodiklinikka_container_name }} {{ koodiklinikka_container_name }}:latest 
+  when: container is defined and container.changed
+
+- name: get old images
+  shell: docker images | grep "^<none>" | awk '{print $3}'
+  register: old_images
+
+- name: clean untagged (old) images
+  shell: docker rmi $(docker images -a | grep "^<none>" | awk '{print $3}')
+  when: old_images.stdout != ""
+  ignore_errors: yes
