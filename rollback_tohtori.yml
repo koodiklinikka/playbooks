@@ -1,7 +1,7 @@
 ---
 - name: Rollback tohtori
   hosts: application
-  vars_files:
-  - roles/tohtori/defaults/main.yml
   tasks:
-    - include: roles/tohtori/tasks/rollback.yml
+        - { include: roles/deploy/tasks/rollback.yml, 
+        container_name: tohtori
+        }

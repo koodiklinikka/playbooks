@@ -1,9 +1,0 @@
----
-koodiklinikka_container_name: koodiklinikka.fi-front
-koodiklinikka_repository_url: git@github.com:koodiklinikka/koodiklinikka.fi.git
-koodiklinikka_port: 8000
-
-koodiklinikka_app_path: /opt/web/koodiklinikka.fi-front
-koodiklinikka_nvm_script: /opt/web/nvm/nvm.sh
-koodiklinikka_user: web
-

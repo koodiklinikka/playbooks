@@ -1,7 +1,12 @@
 ---
 - name: Deploy tohtori
   hosts: application
-  vars_files:
-  - roles/tohtori/defaults/main.yml
   tasks:
-    - include: roles/tohtori/tasks/build.yml
+    - { include: roles/deploy/tasks/deploy.yml, 
+        container_name: tohtori, 
+        repository_url: 'git@github.com:koodiklinikka/tohtori.git',
+        port: 6666, 
+        app_path: /opt/tohtori/tohtori,
+        user: web }
+
+
