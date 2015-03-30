@@ -7,7 +7,7 @@
     - vars/users.yml
     - vars/ejson_key.yml
     - vars/newrelic_key.yml
-    - roles/koodiklinikka.fi/defaults/main.yml
+    - roles/koodiklinikka.fi-front/defaults/main.yml
     - roles/koodiklinikka.fi-api/defaults/main.yml
   roles:
     - base

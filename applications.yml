@@ -2,7 +2,7 @@
 - name: Setup new application server
   hosts: application
   roles:
-    - koodiklinikka.fi
+    - koodiklinikka.fi-front
     - koodiklinikka.fi-api
     - tohtori
   vars_files:
