@@ -1,0 +1,7 @@
+---
+- name: Deploy front
+  hosts: application
+  vars_files:
+  - roles/koodiklinikka.fi-front/defaults/main.yml
+  tasks:
+    - include: roles/koodiklinikka.fi-front/tasks/main.yml
