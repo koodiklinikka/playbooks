@@ -1,7 +1,12 @@
 ---
 - name: Deploy api
   hosts: application
-  vars_files:
-  - roles/koodiklinikka.fi-api/defaults/main.yml
   tasks:
-    - include: roles/koodiklinikka.fi-api/tasks/main.yml
+    - { include: roles/deploy/tasks/deploy.yml, 
+        container_name: koodiklinikka.fi-api, 
+        repository_url: 'git@github.com:koodiklinikka/koodiklinikka.fi-api.git',
+        port: 9000, 
+        app_path: /opt/web/koodiklinikka.fi-api,
+        user: web }
+
+

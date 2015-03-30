@@ -1,7 +1,0 @@
----
-koodiklinikka_tohtori_project_name: tohtori
-koodiklinikka_tohtori_client_repo: git@github.com:koodiklinikka/tohtori.git
-koodiklinikka_tohtori_user: web
-koodiklinikka_tohtori_app_path: /opt/tohtori/tohtori
-
-koodiklinikka_tohtori_container_name: tohtori_bot

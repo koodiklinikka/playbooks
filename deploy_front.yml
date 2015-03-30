@@ -1,7 +1,12 @@
 ---
 - name: Deploy front
   hosts: application
-  vars_files:
-  - roles/koodiklinikka.fi-front/defaults/main.yml
   tasks:
-    - include: roles/koodiklinikka.fi-front/tasks/main.yml
+    - { include: roles/deploy/tasks/deploy.yml, 
+        container_name: koodiklinikka.fi-front, 
+        repository_url: 'git@github.com:koodiklinikka/koodiklinikka.fi.git',
+        port: 8000, 
+        app_path: /opt/web/koodiklinikka.fi-front,
+        user: web }
+
+

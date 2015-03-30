@@ -1,5 +1,0 @@
----
-- name: Create tohtori user
-  sudo: true
-  user: name=tohtori home=/opt/tohtori password=$1$U7pTMako$SY19s1PIxdD2NCFgM0LQr0
-

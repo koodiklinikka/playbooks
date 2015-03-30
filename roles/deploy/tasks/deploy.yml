@@ -1,36 +1,36 @@
 ---
 - name: Deploy client from git
-  remote_user: "{{ koodiklinikka_user }}"
+  remote_user: "{{ user }}"
   action: >
     git
-    repo="{{ koodiklinikka_repository_url }}"
-    dest="{{ koodiklinikka_app_path }}"
+    repo="{{ repository_url }}"
+    dest="{{ app_path }}"
     accept_hostkey=True
   sudo: no
   register: gitclone
 
 - name: get  previous container
-  shell: docker images|grep {{ koodiklinikka_container_name }}|grep latest| awk '{print $3}'
+  shell: docker images|grep {{ container_name }}|grep latest| awk '{print $3}'
   register: current_image_sha
 
-- name: Build {{ koodiklinikka_container_name }}
+- name: Build {{ container_name }}
   shell: ./build_docker
   args:
-    chdir: "{{ koodiklinikka_app_path}}"
+    chdir: "{{ app_path}}"
   sudo: yes
   when: gitclone.changed
   register: container
 
 - name: tag previous version
-  shell: docker tag -f {{ current_image_sha.stdout }} {{ koodiklinikka_container_name }}:old
+  shell: docker tag -f {{ current_image_sha.stdout }} {{ container_name }}:old
   when: container is defined and container.changed and current_image_sha.stdout != ""
 
 - name: get running container
-  shell: docker ps |grep {{ koodiklinikka_container_name }}| awk '{print $1}'
+  shell: docker ps |grep {{ container_name }}| awk '{print $1}'
   register: current_container_id
 
 - name: kill old version
-  shell: docker stop {{ koodiklinikka_container_name }}
+  shell: docker stop {{ container_name }}
   when: container is defined and container.changed and current_container_id.stdout != ""
 
 - name: get old containers
@@ -42,7 +42,7 @@
   when: old_containers.stdout != ""
 
 - name: Start the container
-  shell: docker run --restart=always -p 127.0.0.1:{{ koodiklinikka_port }}:{{ koodiklinikka_port }} -d --name {{ koodiklinikka_container_name }} {{ koodiklinikka_container_name }}:latest 
+  shell: docker run --restart=always -p 127.0.0.1:{{ port }}:{{ port }} -d --name {{ container_name }} {{ container_name }}:latest 
   when: container is defined and container.changed
 
 - name: get old images

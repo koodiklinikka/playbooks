@@ -1,7 +1,7 @@
 ---
 - name: Rollback front
   hosts: application
-  vars_files:
-  - roles/koodiklinikka.fi-front/defaults/main.yml
   tasks:
-    - include: roles/koodiklinikka.fi-front/tasks/rollback.yml
+        - { include: roles/deploy/tasks/rollback.yml, 
+        container_name: koodiklinikka.fi-front
+        }
