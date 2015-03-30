@@ -2,7 +2,6 @@
 - name: Setup new application server
   hosts: application
   roles:
-    - nvm
     - koodiklinikka.fi
     - koodiklinikka.fi-api
     - tohtori

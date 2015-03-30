@@ -28,7 +28,7 @@ server {
     root {{ koodiklinikka_app_path }}/public;
 
     location / {
-        try_files $uri /index.html;
+        proxy_pass  http://localhost:{{ koodiklinikka_port }};
     }
 
     location /api {
